@@ -3,16 +3,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SubFrameAddSubtract extends JFrame implements ActionListener {
-    static private JFrame subF, subFrameA, subFrameB, subFrameResult;
-    static private JTextField dimMText, dimNText;
-    static private JTextField[][] textFieldA, textFieldB;
+public class SubFrameScale extends JFrame implements ActionListener {
+    static private JFrame subF, subFrameScale, subFrameA, subFrameResult;
+    static private JTextField dimMText, dimNText, constantScale;
+    static private JTextField[][] textField;
+    static private double[][] subMatrix, subMatrixResult;
     static private int dimM, dimN;
-    static private double[][] subMatrix1, subMatrix2, subMatrixResult;
-    static private String operation;
-    public SubFrameAddSubtract(String o) {
-        operation = o;
-        subF = new JFrame("Matrix A" + operation + "B");
+    static private double scalar;
+    public SubFrameScale() {
+        subF = new JFrame("Matrix cA");
         subF.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
         g.gridx = 0;
@@ -45,25 +44,54 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         subF.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subF.setVisible(true);
     }
+    
+    private void createFrameScale() {
+        subFrameScale = new JFrame("Scalar");
+        subFrameScale.setBackground(Color.green);
+        subFrameScale.setLayout(new GridBagLayout());
+        GridBagConstraints g = new GridBagConstraints();
+        g.gridx = 0;
+        g.gridy = 0;
 
-    private void createFrame1() {
+        JLabel subL = new JLabel("Input a the scalar:\t");
+        subFrameScale.add(subL);
+        g.gridx++;
+
+        constantScale = new JTextField("");
+        constantScale.setPreferredSize(new Dimension(50, 20));
+        subFrameScale.add(constantScale);
+        g.gridx++;
+        g.gridy++;
+
+        JButton subOKScale = new JButton("Ok");
+        subOKScale.addActionListener(this);
+        subOKScale.setActionCommand("OkScale");
+
+        subFrameScale.add(subOKScale);
+
+        subFrameScale.setSize(500,200);
+        subFrameScale.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        subFrameScale.setVisible(true);
+    }
+    
+    private void createFrameMatrix() {
         subFrameA = new JFrame("Matrix A");
         subFrameA.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
         g.gridx = 0;
         g.gridy = 0;
 
-        subMatrix1 = new double[dimM][dimN];
+        subMatrix = new double[dimM][dimN];
 
-        textFieldA = new JTextField[dimM][dimN];
+        textField = new JTextField[dimM][dimN];
 
         for (int i = 0; i < dimM; i++) {
             for (int j = 0; j < dimN; j++) {
                 g.gridx = j;
                 g.gridy = i;
-                textFieldA[i][j] = new JTextField("");
-                textFieldA[i][j].setPreferredSize(new Dimension(50, 20));
-                subFrameA.add(textFieldA[i][j], g);
+                textField[i][j] = new JTextField("");
+                textField[i][j].setPreferredSize(new Dimension(50, 20));
+                subFrameA.add(textField[i][j], g);
             }
 
         }
@@ -81,43 +109,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameA.setVisible(true);
     }
-
-    private void createFrame2() {
-        subFrameB = new JFrame("Matrix B");
-        subFrameB.setLayout(new GridBagLayout());
-        GridBagConstraints g = new GridBagConstraints();
-        g.gridx = 0;
-        g.gridy = 0;
-
-        subMatrix2 = new double[dimM][dimN];
-
-        textFieldB = new JTextField[dimM][dimN];
-
-        for (int i = 0; i < dimM; i++) {
-            for (int j = 0; j < dimN; j++) {
-                g.gridx = j;
-                g.gridy = i;
-                textFieldB[i][j] = new JTextField("");
-                textFieldB[i][j].setPreferredSize(new Dimension(50, 20));
-                subFrameB.add(textFieldB[i][j], g);
-            }
-
-        }
-
-        JButton frameBOk = new JButton("Ok");
-        frameBOk.addActionListener(this);
-        frameBOk.setActionCommand("OkB");
-
-        g.gridx++;
-        g.gridy++;
-
-        subFrameB.add(frameBOk, g);
-
-        subFrameB.setSize(200 + 10 * dimN,200 + 10 * dimN);
-        subFrameB.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        subFrameB.setVisible(true);
-    }
-
+    
     private void createResultFrame() {
         subFrameResult = new JFrame("Result");
         subFrameResult.setLayout(new GridBagLayout());
@@ -126,7 +118,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         g.gridx = 0;
         g.gridy = 0;
 
-        subMatrixResult = calculateResult(subMatrix1, subMatrix2);
+        subMatrixResult = calculateResult(subMatrix, scalar);
 
         JLabel[][] results = new JLabel[dimM][dimN];
         results = MatrixHelper.toJLabel(subMatrixResult);
@@ -157,21 +149,17 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameResult.setVisible(true);
     }
-
-    private double[][] calculateResult(double[][] tempM1, double[][] tempM2) {
-        double[][] tempR = new double[tempM1.length][tempM1[0].length];
-        for (int i = 0; i < dimM; i++) {
-            for (int j = 0; j <dimN; j++) {
-                if (operation.equals("add")) {
-                    tempR[i][j] = tempM1[i][j] + tempM2[i][j];
-                } else if (operation.equals("subtract")) {
-                    tempR[i][j] = tempM1[i][j] - tempM2[i][j];
-                }
+    
+    private double[][] calculateResult(double[][] matrix, double scale) {
+        double[][] temp = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[0].length; j++) {
+                temp[i][j] = scale * matrix[i][j];
             }
         }
-        return tempR;
+        return temp;
     }
-
+    
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
         System.out.println(s);
@@ -182,22 +170,18 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                     dimM = Integer.parseInt(dimMText.getText());
                     dimN = Integer.parseInt(dimNText.getText());
                     subF.dispose();
-                    createFrame1();
+                    createFrameScale();
                 } catch (NumberFormatException i) {
                     JFrame errorFrame = new JFrame();
                     JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
                 System.out.println(dimM + " x " + dimN);
                 break;
-            case "OkA":
+            case "OkScale":
                 try {
-                    for (int i = 0; i < dimM; i++) {
-                        for (int j = 0; j < dimN; j++) {
-                            subMatrix1[i][j] = Double.parseDouble(textFieldA[i][j].getText());
-                        }
-                    }
-                    subFrameA.dispose();
-                    createFrame2();
+                    scalar = Double.parseDouble(constantScale.getText());
+                    subFrameScale.dispose();
+                    createFrameMatrix();
 
                 } catch (NumberFormatException i) {
                     JFrame errorFrame = new JFrame();
@@ -205,15 +189,15 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                 }
                 System.out.println("Frame A Success");
                 break;
-            case "OkB":
+            case "OkA":
                 try {
                     for (int i = 0; i < dimM; i++) {
                         for (int j = 0; j < dimN; j++) {
-                            subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
+                            subMatrix[i][j] = Double.parseDouble(textField[i][j].getText());
                         }
                     }
                     System.out.println("Frame B Success");
-                    subFrameB.dispose();
+                    subFrameA.dispose();
                     createResultFrame();
 
                 } catch (NumberFormatException i) {
@@ -227,8 +211,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                 break;
             case "Save":
                 System.out.println(MatrixCalculator.getOperation());
-                System.out.println("File Saved: " + FileSaver.createSaveTwoInput(subMatrix1, subMatrix2, subMatrixResult, operation));
+                System.out.println("File Saved: " + FileSaver.createSaveScalarInput(scalar, subMatrix, subMatrixResult, "multiply"));
         }
     }
-
 }

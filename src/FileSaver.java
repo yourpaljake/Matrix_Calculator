@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class FileSaver {
     static private String locationDirectory;
-    public static boolean createSave(double[][] matrix1, double[][] matrix2, double[][] result, String operation) {
+    public static boolean createSaveTwoInput(double[][] matrix1, double[][] matrix2, double[][] result, String operation) {
         try {
             if (locationDirectory == null) {
                 JFrame locationFrame = new JFrame("Save");
@@ -80,6 +80,16 @@ public class FileSaver {
 
             ///Users/jacoblarson/Desktop/Calcualtor Test
         } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean createSaveScalarInput(double scalar, double[][] matrix, double[][] result, String operation) {
+        try {
+
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

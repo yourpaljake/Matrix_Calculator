@@ -7,7 +7,7 @@ public class MatrixCalculator extends JFrame implements ActionListener {
     static private JFrame frame;
     static private JMenuBar mb;
     static private JMenu elementary;
-    static private JMenuItem add, subtract;
+    static private JMenuItem add, subtract, scale;
     static private JButton go;
     static private JLabel label;
 
@@ -26,14 +26,18 @@ public class MatrixCalculator extends JFrame implements ActionListener {
 
         add = new JMenuItem("Add (A+B)");
         subtract = new JMenuItem("Subtract (A-B)");
+        scale = new JMenuItem("Scale (cA)");
 
         add.addActionListener(this);
         add.setActionCommand("add");
         subtract.addActionListener(this);
         subtract.setActionCommand("subtract");
+        scale.addActionListener(this);
+        scale.setActionCommand("scale");
 
         elementary.add(add);
         elementary.add(subtract);
+        elementary.add(scale);
 
         mb.add(elementary);
 
@@ -81,6 +85,9 @@ public class MatrixCalculator extends JFrame implements ActionListener {
                     case "add", "subtract": {
                         SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
                         break;
+                    }
+                    case "scale": {
+                        SubFrameScale sF1 = new SubFrameScale();
                     }
                 }
             }
