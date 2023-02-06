@@ -52,7 +52,6 @@ public class CopyPaste {
     }
 
     public static JTextField[][] pasteMatrix(JTextField[][] field, int pos) {
-        System.out.println("Attempting paste from position " + pos);
         JTextField[][] temp = field;
         try {
             for (int i = 0; i < temp.length; i++) {
@@ -60,7 +59,7 @@ public class CopyPaste {
                     temp[i][j].setText(matrices[pos][j][j] + "");
                 }
             }
-            System.out.println("Successfully pasted from position " + pos);
+            System.out.println("Matrix pasted from position " + pos);
             return temp;
         } catch (NullPointerException e) {
             JFrame error = new JFrame("Error");

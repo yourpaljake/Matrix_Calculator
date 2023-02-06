@@ -251,7 +251,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
-            System.out.println(dimM + " x " + dimN);
+            System.out.printf("Size of Matrix: %d x %d", dimM, dimN);
         } else if (s.equals("OkA")) {
             try {
                 for (int i = 0; i < dimM; i++) {
@@ -272,7 +272,6 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                 for (int i = 0; i < dimM; i++) {
                     for (int j = 0; j < dimN; j++) {
                         subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
-                        System.out.println(subMatrix2[i][j]);
                     }
                 }
                 System.out.println("Frame B Success");
@@ -313,7 +312,6 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                                 subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
                             }
                         }
-                        System.out.println("Frame B Success");
                     } catch (NumberFormatException i) {
                         JFrame errorFrame = new JFrame();
                         JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);

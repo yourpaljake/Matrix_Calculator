@@ -35,6 +35,7 @@ public class FileSaver {
             }
 
             File newSave = new File(locationDirectory + "/" + ++currentFile + ".txt");
+            //noinspection ResultOfMethodCallIgnored
             newSave.createNewFile();
 
             try {
@@ -113,6 +114,7 @@ public class FileSaver {
             }
 
             File newSave = new File(locationDirectory + "/" + ++currentFile + ".txt");
+            //noinspection ResultOfMethodCallIgnored
             newSave.createNewFile();
 
             try {

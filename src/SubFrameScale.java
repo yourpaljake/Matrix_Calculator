@@ -233,7 +233,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
-            System.out.println(dimM + " x " + dimN);
+            System.out.printf("Size of Matrix: %d x %d", dimM, dimN);
         } else if (s.equals("OkScale")) {
             try {
                 scalar = Double.parseDouble(constantScale.getText());
@@ -265,8 +265,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
             subFrameResult.dispose();
             MatrixCalculator.setOperation(null);
         } else if (s.equals("save")) {
-            System.out.println(MatrixCalculator.getOperation());
-            System.out.println("File Saved: " + FileSaver.createSaveScalarInput(scalar, subMatrix, subMatrixResult, "multiply"));
+            System.out.println("File Saved: " + FileSaver.createSaveScalarInput(scalar, subMatrix, subMatrixResult, "scale"));
         } else if (s.substring(0, s.length() - 2).equals("Save")) {
             int index = Integer.parseInt(s.substring(s.length() - 1));
             switch (currentFrame) {
@@ -277,7 +276,6 @@ public class SubFrameScale extends JFrame implements ActionListener {
                                 subMatrix[i][j] = Double.parseDouble(textField[i][j].getText());
                             }
                         }
-                        System.out.println("Frame B Success");
                     } catch (NumberFormatException i) {
                         JFrame errorFrame = new JFrame();
                         JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);

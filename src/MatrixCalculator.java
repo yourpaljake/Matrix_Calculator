@@ -4,29 +4,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MatrixCalculator extends JFrame implements ActionListener {
-    static private JFrame frame;
-    static private JMenuBar mb;
-    static private JMenu elementary;
-    static private JMenuItem add, subtract, scale;
-    static private JButton go;
     static private JLabel label;
 
     static private String operation;
 
     public MatrixCalculator() {
-        frame = new JFrame("Matrix Calculator");
+        JFrame frame = new JFrame("Matrix Calculator");
         frame.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
 
         label = new JLabel("Nothing Selected");
 
-        mb = new JMenuBar();
+        JMenuBar mb = new JMenuBar();
 
-        elementary = new JMenu("Elementary Operations");
+        JMenu elementary = new JMenu("Elementary Operations");
 
-        add = new JMenuItem("Add (A+B)");
-        subtract = new JMenuItem("Subtract (A-B)");
-        scale = new JMenuItem("Scale (cA)");
+        JMenuItem add = new JMenuItem("Add (A+B)");
+        JMenuItem subtract = new JMenuItem("Subtract (A-B)");
+        JMenuItem scale = new JMenuItem("Scale (cA)");
 
         add.addActionListener(this);
         add.setActionCommand("add");
@@ -47,7 +42,7 @@ public class MatrixCalculator extends JFrame implements ActionListener {
 
         frame.add(label, g);
 
-        go = new JButton("Go");
+        JButton go = new JButton("Go");
         go.addActionListener(this);
         go.setActionCommand("Go");
         go.setPreferredSize(new Dimension(90,30));
@@ -70,10 +65,6 @@ public class MatrixCalculator extends JFrame implements ActionListener {
 
     public static void setOperation(String op) {
         operation = op;
-    }
-
-    public static JFrame getFrame() {
-        return frame;
     }
 
     public static void main(String[] args) {
