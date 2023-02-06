@@ -90,7 +90,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         menuBar.add(tempMenu);
         subFrameA.setJMenuBar(menuBar);
 
-        subFrameA.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameA.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameA.setLocationRelativeTo(null);
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameA.setVisible(true);
@@ -136,7 +136,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         menuBar.add(tempMenu);
         subFrameB.setJMenuBar(menuBar);
 
-        subFrameB.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameB.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameB.setLocationRelativeTo(null);
         subFrameB.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameB.setVisible(true);
@@ -186,7 +186,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         menuBar.add(tempMenu);
         subFrameResult.setJMenuBar(menuBar);
 
-        subFrameResult.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameResult.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameResult.setLocationRelativeTo(null);
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameResult.setVisible(true);

@@ -118,11 +118,11 @@ public class SubFrameScale extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu tempMenu = CopyPaste.createPasteMenu();
-        addActionToMenu(tempMenu);
+        addActionToPasteMenu(tempMenu);
         menuBar.add(tempMenu);
         subFrameA.setJMenuBar(menuBar);
 
-        subFrameA.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameA.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameA.setLocationRelativeTo(null);
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameA.setVisible(true);
@@ -168,11 +168,11 @@ public class SubFrameScale extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu tempMenu = CopyPaste.createSaveMenu();
-        addActionToMenu(tempMenu);
+        addActionToSaveMenu(tempMenu);
         menuBar.add(tempMenu);
         subFrameResult.setJMenuBar(menuBar);
 
-        subFrameResult.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameResult.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameResult.setLocationRelativeTo(null);
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameResult.setVisible(true);
@@ -190,7 +190,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
         return temp;
     }
 
-    private void addActionToMenu(JMenu jMenu) {
+    private void addActionToPasteMenu(JMenu jMenu) {
         Component[] components = jMenu.getMenuComponents();
         JMenu[] menus = new JMenu[components.length];
 
@@ -201,6 +201,18 @@ public class SubFrameScale extends JFrame implements ActionListener {
             JMenuItem item2 = (JMenuItem) menus[i].getMenuComponent(1);
             item.addActionListener(this);
             item2.addActionListener(this);
+        }
+    }
+
+    private void addActionToSaveMenu(JMenu jMenu) {
+        Component[] components = jMenu.getMenuComponents();
+        JMenu[] menus = new JMenu[components.length];
+
+        for (int i = 0; i < menus.length; i++) {
+            menus[i] = (JMenu) components[i];
+
+            JMenuItem item = (JMenuItem) menus[i].getMenuComponent(0);
+            item.addActionListener(this);
         }
     }
 
