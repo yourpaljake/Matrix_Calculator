@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings({"WriteOnlyObject", "EnhancedSwitchMigration"})
 public class SubFrameScale extends JFrame implements ActionListener {
     static private JFrame subF, subFrameScale, subFrameA, subFrameResult;
     static private JTextField dimMText, dimNText, constantScale;
@@ -11,6 +12,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
     static private int dimM, dimN;
     static private double scalar;
     static private int currentFrame;
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     static private boolean[] isShowing;
     public SubFrameScale() {
         isShowing = new boolean[4];
@@ -216,10 +218,25 @@ public class SubFrameScale extends JFrame implements ActionListener {
         }
     }
 
-    public static boolean[] getIsShowing() {
-        return isShowing;
+    private static boolean fractionToScalar(String s) {
+        try {
+            int posOfSlash = s.indexOf("/");
+            int numerator = Integer.parseInt(s.substring(0,posOfSlash));
+            int denominator = Integer.parseInt(s.substring(posOfSlash + 1));
+
+            scalar = ((double) numerator) / denominator;
+
+            return true;
+        } catch (NumberFormatException e) {
+            JFrame errorFrame = new JFrame();
+            JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
+    @SuppressWarnings("DuplicateExpressions")
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
 
@@ -233,10 +250,16 @@ public class SubFrameScale extends JFrame implements ActionListener {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
-            System.out.printf("Size of Matrix: %d x %d", dimM, dimN);
+            System.out.printf("Size of Matrix: %d x %d%n", dimM, dimN);
         } else if (s.equals("OkScale")) {
             try {
-                scalar = Double.parseDouble(constantScale.getText());
+                String text = constantScale.getText();
+                if (SubFrameScale.fractionToScalar(text)) {
+                    System.out.println("Fraction converted to double");
+                } else {
+                    scalar = Double.parseDouble(text);
+                    System.out.println("Value already double");
+                }
                 subFrameScale.dispose();
                 createFrameMatrix();
 

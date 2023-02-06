@@ -1,8 +1,15 @@
 import javax.swing.*;
 
 public class CopyPaste {
-    static private double[][][] matrices = new double[6][1][1];
+
+    @SuppressWarnings("FieldMayBeFinal")
+    static private double[][][] matrices;
+
     static private int num;
+
+    static {
+        matrices = new double[6][1][1];
+    }
 
     public static JMenu createSaveMenu() {
 
@@ -39,9 +46,7 @@ public class CopyPaste {
         try {
             matrices[pos] = new double[matrix.length][matrix[0].length];
             for (int i = 0; i < matrix.length; i++) {
-                for (int j = 0; j < matrix[0].length; j++) {
-                    matrices[pos][i][j] = matrix[i][j];
-                }
+                System.arraycopy(matrix[i], 0, matrices[pos][i], 0, matrix[0].length);
             }
             
             System.out.println("Matrix saved to position " + pos);
@@ -52,11 +57,12 @@ public class CopyPaste {
     }
 
     public static JTextField[][] pasteMatrix(JTextField[][] field, int pos) {
+        @SuppressWarnings("UnnecessaryLocalVariable")
         JTextField[][] temp = field;
         try {
             for (int i = 0; i < temp.length; i++) {
                 for (int j = 0; j < temp[0].length; j++) {
-                    temp[i][j].setText(matrices[pos][j][j] + "");
+                    temp[i][j].setText(matrices[pos][i][j] + "");
                 }
             }
             System.out.println("Matrix pasted from position " + pos);

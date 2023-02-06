@@ -14,6 +14,10 @@ public class FileSaver {
 
             }
 
+            if (locationDirectory == null || locationDirectory.equals("")) {
+                return false;
+            }
+
             File folder = new File(locationDirectory);
             File[] listOfFiles = folder.listFiles();
 

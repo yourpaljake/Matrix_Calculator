@@ -59,18 +59,16 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         frame.setVisible(true);
     }
 
-    public static String getOperation() {
-        return operation;
-    }
-
     public static void setOperation(String op) {
         operation = op;
     }
 
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         MatrixCalculator calculator = new MatrixCalculator();
     }
 
+    @SuppressWarnings("unused")
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
         System.out.println("Current Action: " + s);
@@ -78,6 +76,7 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         if (s.equals("Go")) {
             if (!(operation == null) && !operation.equals("")) {
                 label.setText("Operation: ");
+                //noinspection EnhancedSwitchMigration
                 switch (operation) {
                     case "add", "subtract": {
                         SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);

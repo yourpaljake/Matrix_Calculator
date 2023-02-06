@@ -11,6 +11,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
     static private double[][] subMatrix1, subMatrix2, subMatrixResult;
     static private String operation;
     static private int currentFrame;
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     static private boolean[] isShowing;
     public SubFrameAddSubtract(String o) {
         isShowing = new boolean[4];
@@ -18,6 +19,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         operation = o;
         subF = new JFrame("Matrix A" + operation + "B");
         subF.setLayout(new GridBagLayout());
+        @SuppressWarnings("WriteOnlyObject")
         GridBagConstraints g = new GridBagConstraints();
         g.gridx = 0;
         g.gridy = 0;
@@ -234,10 +236,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         }
     }
 
-    public static boolean[] getIsShowing() {
-        return isShowing;
-    }
-
+    @SuppressWarnings({"EnhancedSwitchMigration", "DuplicateExpressions"})
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
 
