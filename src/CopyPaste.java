@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class CopyPaste {
-    static private double[][][] matrices = new double[2][1][1];
+    static private double[][][] matrices = new double[6][1][1];
     static private int num;
 
     public static JMenu createSaveMenu() {
@@ -19,7 +19,7 @@ public class CopyPaste {
     }
 
     public static JMenu createPasteMenu() {
-        num = 2;
+        num = 6;
         
         JMenu temp = new JMenu("Edit");
 
@@ -35,7 +35,7 @@ public class CopyPaste {
         return temp;
     }
 
-    public static boolean saveMatrix(double[][] matrix, int pos) {
+    public static void saveMatrix(double[][] matrix, int pos) {
         try {
             matrices[pos] = new double[matrix.length][matrix[0].length];
             for (int i = 0; i < matrix.length; i++) {
@@ -45,11 +45,9 @@ public class CopyPaste {
             }
             
             System.out.println("Matrix saved to position " + pos);
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Matrix failed to save");
-            return false;
         }
     }
 

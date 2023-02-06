@@ -46,6 +46,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         subF.setSize(500,200);
         subF.setLocationRelativeTo(null);
         subF.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        subF.addWindowListener(new WindowClose());
         subF.setVisible(true);
     }
 
@@ -83,13 +84,14 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu tempMenu = CopyPaste.createPasteMenu();
-        addActionToMenu(tempMenu);
+        addActionToPasteMenu(tempMenu);
         menuBar.add(tempMenu);
-        subFrameA.add(menuBar);
+        subFrameA.setJMenuBar(menuBar);
 
         subFrameA.setSize(200 + 10 * dimN,200 + 10 * dimN);
         subFrameA.setLocationRelativeTo(null);
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        subFrameA.addWindowListener(new WindowClose());
         subFrameA.setVisible(true);
     }
 
@@ -127,13 +129,14 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu tempMenu = CopyPaste.createPasteMenu();
-        addActionToMenu(tempMenu);
+        addActionToPasteMenu(tempMenu);
         menuBar.add(tempMenu);
-        subFrameB.add(menuBar);
+        subFrameB.setJMenuBar(menuBar);
 
         subFrameB.setSize(200 + 10 * dimN,200 + 10 * dimN);
         subFrameB.setLocationRelativeTo(null);
         subFrameB.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        subFrameB.addWindowListener(new WindowClose());
         subFrameB.setVisible(true);
     }
 
@@ -175,13 +178,14 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu tempMenu = CopyPaste.createSaveMenu();
-        addActionToMenu(tempMenu);
+        addActionToSaveMenu(tempMenu);
         menuBar.add(tempMenu);
-        subFrameResult.add(menuBar);
+        subFrameResult.setJMenuBar(menuBar);
 
         subFrameResult.setSize(200 + 10 * dimN,200 + 10 * dimN);
         subFrameResult.setLocationRelativeTo(null);
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        subFrameResult.addWindowListener(new WindowClose());
         subFrameResult.setVisible(true);
     }
 
@@ -199,7 +203,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         return tempR;
     }
 
-    private void addActionToMenu(JMenu jMenu) {
+    private void addActionToPasteMenu(JMenu jMenu) {
         Component[] components = jMenu.getMenuComponents();
         JMenu[] menus = new JMenu[components.length];
 
@@ -210,6 +214,18 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
             JMenuItem item2 = (JMenuItem) menus[i].getMenuComponent(1);
             item.addActionListener(this);
             item2.addActionListener(this);
+        }
+    }
+
+    private void addActionToSaveMenu(JMenu jMenu) {
+        Component[] components = jMenu.getMenuComponents();
+        JMenu[] menus = new JMenu[components.length];
+
+        for (int i = 0; i < menus.length; i++) {
+            menus[i] = (JMenu) components[i];
+
+            JMenuItem item = (JMenuItem) menus[i].getMenuComponent(0);
+            item.addActionListener(this);
         }
     }
 
@@ -247,6 +263,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
                 for (int i = 0; i < dimM; i++) {
                     for (int j = 0; j < dimN; j++) {
                         subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
+                        System.out.println(subMatrix2[i][j]);
                     }
                 }
                 System.out.println("Frame B Success");
@@ -261,16 +278,37 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
             subFrameResult.dispose();
             MatrixCalculator.setOperation(null);
             MatrixCalculator.getFrame().setVisible(true);
-        } else if (s.equals("Save")) {
+        } else if (s.equals("save")) {
             System.out.println("File Saved: " + FileSaver.createSaveTwoInput(subMatrix1, subMatrix2, subMatrixResult, operation));
         } else if (s.substring(0, s.length() - 2).equals("Save")) {
             int index = Integer.parseInt(s.substring(s.length() - 1));
             switch (currentFrame) {
                 case 1: {
+                    try {
+                        for (int i = 0; i < dimM; i++) {
+                            for (int j = 0; j < dimN; j++) {
+                                subMatrix1[i][j] = Double.parseDouble(textFieldA[i][j].getText());
+                            }
+                        }
+                    } catch (NumberFormatException i) {
+                        JFrame errorFrame = new JFrame();
+                        JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                    }
                     CopyPaste.saveMatrix(subMatrix1, index - 1);
                     break;
                 }
                 case 2: {
+                    try {
+                        for (int i = 0; i < dimM; i++) {
+                            for (int j = 0; j < dimN; j++) {
+                                subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
+                            }
+                        }
+                        System.out.println("Frame B Success");
+                    } catch (NumberFormatException i) {
+                        JFrame errorFrame = new JFrame();
+                        JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                    }
                     CopyPaste.saveMatrix(subMatrix2, index - 1);
                     break;
                 }
