@@ -11,7 +11,9 @@ public class SubFrameScale extends JFrame implements ActionListener {
     static private int dimM, dimN;
     static private double scalar;
     static private int currentFrame;
+    static private boolean[] isShowing;
     public SubFrameScale() {
+        isShowing = new boolean[4];
         currentFrame = 0;
         subF = new JFrame("Matrix cA");
         subF.setLayout(new GridBagLayout());
@@ -45,8 +47,8 @@ public class SubFrameScale extends JFrame implements ActionListener {
         subF.setSize(500,200);
         subF.setLocationRelativeTo(null);
         subF.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        subF.addWindowListener(new WindowClose());
         subF.setVisible(true);
+        isShowing[0] = true;
     }
     
     private void createFrameScale() {
@@ -77,8 +79,9 @@ public class SubFrameScale extends JFrame implements ActionListener {
         subFrameScale.setSize(500,200);
         subFrameScale.setLocationRelativeTo(null);
         subFrameScale.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        subFrameScale.addWindowListener(new WindowClose());
         subFrameScale.setVisible(true);
+        isShowing[0] = false;
+        isShowing[1] = true;
     }
     
     private void createFrameMatrix() {
@@ -122,8 +125,9 @@ public class SubFrameScale extends JFrame implements ActionListener {
         subFrameA.setSize(200 + 10 * dimN,200 + 10 * dimN);
         subFrameA.setLocationRelativeTo(null);
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        subFrameA.addWindowListener(new WindowClose());
         subFrameA.setVisible(true);
+        isShowing[1] = false;
+        isShowing[2] = true;
     }
     
     private void createResultFrame() {
@@ -171,8 +175,9 @@ public class SubFrameScale extends JFrame implements ActionListener {
         subFrameResult.setSize(200 + 10 * dimN,200 + 10 * dimN);
         subFrameResult.setLocationRelativeTo(null);
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        subFrameResult.addWindowListener(new WindowClose());
         subFrameResult.setVisible(true);
+        isShowing[2] = false;
+        isShowing[3] = true;
     }
     
     private double[][] calculateResult(double[][] matrix, double scale) {
@@ -198,7 +203,11 @@ public class SubFrameScale extends JFrame implements ActionListener {
             item2.addActionListener(this);
         }
     }
-    
+
+    public static boolean[] getIsShowing() {
+        return isShowing;
+    }
+
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
 
@@ -210,7 +219,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
                 createFrameScale();
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
-                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
             System.out.println(dimM + " x " + dimN);
         } else if (s.equals("OkScale")) {
@@ -221,7 +230,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
 
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
-                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
             System.out.println("Frame A Success");
         } else if (s.equals("OkA")) {
@@ -237,9 +246,10 @@ public class SubFrameScale extends JFrame implements ActionListener {
 
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
-                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
             }
         } else if (s.equals("OkResult")) {
+            isShowing[3] = false;
             subFrameResult.dispose();
             MatrixCalculator.setOperation(null);
         } else if (s.equals("save")) {
@@ -258,7 +268,7 @@ public class SubFrameScale extends JFrame implements ActionListener {
                         System.out.println("Frame B Success");
                     } catch (NumberFormatException i) {
                         JFrame errorFrame = new JFrame();
-                        JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
                     }
                     CopyPaste.saveMatrix(subMatrix, index - 1);
                     break;

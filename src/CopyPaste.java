@@ -64,12 +64,12 @@ public class CopyPaste {
             return temp;
         } catch (NullPointerException e) {
             JFrame error = new JFrame("Error");
-            JOptionPane.showMessageDialog(error, "No Matrix Saved", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(error, "No Matrix Saved", "Error", JOptionPane.WARNING_MESSAGE);
             System.out.println("Matrix failed to paste. No matrix saved");
             return field;
         } catch (IndexOutOfBoundsException e) {
             JFrame error = new JFrame("Error");
-            JOptionPane.showMessageDialog(error, "Incorrect Matrix Size", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(error, "Incorrect Matrix Size", "Error", JOptionPane.WARNING_MESSAGE);
             System.out.printf("Matrix failed to paste. Was %dx%d and expected %dx%d%n", temp.length, temp[0].length, matrices[pos].length, matrices[pos][0].length);
             return field;
         }
