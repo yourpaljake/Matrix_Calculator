@@ -10,7 +10,9 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
     static private int dimM, dimN;
     static private double[][] subMatrix1, subMatrix2, subMatrixResult;
     static private String operation;
+    static private int currentFrame;
     public SubFrameAddSubtract(String o) {
+        currentFrame = 0;
         operation = o;
         subF = new JFrame("Matrix A" + operation + "B");
         subF.setLayout(new GridBagLayout());
@@ -42,11 +44,13 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         subF.add(subB);
 
         subF.setSize(500,200);
+        subF.setLocationRelativeTo(null);
         subF.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subF.setVisible(true);
     }
 
     private void createFrame1() {
+        currentFrame = 1;
         subFrameA = new JFrame("Matrix A");
         subFrameA.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
@@ -77,12 +81,20 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         subFrameA.add(frameAOk, g);
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu tempMenu = CopyPaste.createPasteMenu();
+        addActionToMenu(tempMenu);
+        menuBar.add(tempMenu);
+        subFrameA.add(menuBar);
+
         subFrameA.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameA.setLocationRelativeTo(null);
         subFrameA.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameA.setVisible(true);
     }
 
     private void createFrame2() {
+        currentFrame = 2;
         subFrameB = new JFrame("Matrix B");
         subFrameB.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
@@ -113,12 +125,20 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         subFrameB.add(frameBOk, g);
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu tempMenu = CopyPaste.createPasteMenu();
+        addActionToMenu(tempMenu);
+        menuBar.add(tempMenu);
+        subFrameB.add(menuBar);
+
         subFrameB.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameB.setLocationRelativeTo(null);
         subFrameB.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameB.setVisible(true);
     }
 
     private void createResultFrame() {
+        currentFrame = 3;
         subFrameResult = new JFrame("Result");
         subFrameResult.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
@@ -128,7 +148,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         subMatrixResult = calculateResult(subMatrix1, subMatrix2);
 
-        JLabel[][] results = new JLabel[dimM][dimN];
+        JLabel[][] results;
         results = MatrixHelper.toJLabel(subMatrixResult);
 
         for (JLabel[] labels: results) {
@@ -145,7 +165,7 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         JButton save = new JButton("Save");
         save.addActionListener(this);
-        save.setActionCommand("Save");
+        save.setActionCommand("save");
 
         g.gridy++;
         subFrameResult.add(save, g);
@@ -153,7 +173,14 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         g.gridx++;
         subFrameResult.add(frameResultOk, g);
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu tempMenu = CopyPaste.createSaveMenu();
+        addActionToMenu(tempMenu);
+        menuBar.add(tempMenu);
+        subFrameResult.add(menuBar);
+
         subFrameResult.setSize(200 + 10 * dimN,200 + 10 * dimN);
+        subFrameResult.setLocationRelativeTo(null);
         subFrameResult.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         subFrameResult.setVisible(true);
     }
@@ -172,63 +199,112 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         return tempR;
     }
 
+    private void addActionToMenu(JMenu jMenu) {
+        Component[] components = jMenu.getMenuComponents();
+        JMenu[] menus = new JMenu[components.length];
+
+        for (int i = 0; i < menus.length; i++) {
+            menus[i] = (JMenu) components[i];
+
+            JMenuItem item = (JMenuItem) menus[i].getMenuComponent(0);
+            JMenuItem item2 = (JMenuItem) menus[i].getMenuComponent(1);
+            item.addActionListener(this);
+            item2.addActionListener(this);
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
-        System.out.println(s);
 
-        switch (s) {
-            case "Go":
-                try {
-                    dimM = Integer.parseInt(dimMText.getText());
-                    dimN = Integer.parseInt(dimNText.getText());
-                    subF.dispose();
-                    createFrame1();
-                } catch (NumberFormatException i) {
-                    JFrame errorFrame = new JFrame();
-                    JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
-                }
-                System.out.println(dimM + " x " + dimN);
-                break;
-            case "OkA":
-                try {
-                    for (int i = 0; i < dimM; i++) {
-                        for (int j = 0; j < dimN; j++) {
-                            subMatrix1[i][j] = Double.parseDouble(textFieldA[i][j].getText());
-                        }
+        if (s.equals("Go")) {
+            try {
+                dimM = Integer.parseInt(dimMText.getText());
+                dimN = Integer.parseInt(dimNText.getText());
+                subF.dispose();
+                createFrame1();
+            } catch (NumberFormatException i) {
+                JFrame errorFrame = new JFrame();
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+            System.out.println(dimM + " x " + dimN);
+        } else if (s.equals("OkA")) {
+            try {
+                for (int i = 0; i < dimM; i++) {
+                    for (int j = 0; j < dimN; j++) {
+                        subMatrix1[i][j] = Double.parseDouble(textFieldA[i][j].getText());
                     }
-                    subFrameA.dispose();
-                    createFrame2();
-
-                } catch (NumberFormatException i) {
-                    JFrame errorFrame = new JFrame();
-                    JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
                 System.out.println("Frame A Success");
-                break;
-            case "OkB":
-                try {
-                    for (int i = 0; i < dimM; i++) {
-                        for (int j = 0; j < dimN; j++) {
-                            subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
+                subFrameA.dispose();
+                createFrame2();
+
+            } catch (NumberFormatException i) {
+                JFrame errorFrame = new JFrame();
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        } else if (s.equals("OkB")) {
+            try {
+                for (int i = 0; i < dimM; i++) {
+                    for (int j = 0; j < dimN; j++) {
+                        subMatrix2[i][j] = Double.parseDouble(textFieldB[i][j].getText());
+                    }
+                }
+                System.out.println("Frame B Success");
+                subFrameB.dispose();
+                createResultFrame();
+
+            } catch (NumberFormatException i) {
+                JFrame errorFrame = new JFrame();
+                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+            }
+        } else if (s.equals("OkResult")) {
+            subFrameResult.dispose();
+            MatrixCalculator.setOperation(null);
+            MatrixCalculator.getFrame().setVisible(true);
+        } else if (s.equals("Save")) {
+            System.out.println("File Saved: " + FileSaver.createSaveTwoInput(subMatrix1, subMatrix2, subMatrixResult, operation));
+        } else if (s.substring(0, s.length() - 2).equals("Save")) {
+            int index = Integer.parseInt(s.substring(s.length() - 1));
+            switch (currentFrame) {
+                case 1: {
+                    CopyPaste.saveMatrix(subMatrix1, index - 1);
+                    break;
+                }
+                case 2: {
+                    CopyPaste.saveMatrix(subMatrix2, index - 1);
+                    break;
+                }
+                case 3: {
+                    CopyPaste.saveMatrix(subMatrixResult, index - 1);
+                    break;
+                }
+            }
+        } else if (s.substring(0, s.length() - 2).equals("Paste")) {
+            int index = Integer.parseInt(s.substring(s.length() - 1));
+            switch (currentFrame) {
+                case 1: {
+                    JTextField[][] temp = CopyPaste.pasteMatrix(textFieldA, index - 1);
+                    for (int i = 0; i < textFieldA.length; i++) {
+                        for (int j = 0; j < textFieldA[0].length; j++) {
+                            textFieldA[i][j].setText(temp[i][j].getText());
                         }
                     }
-                    System.out.println("Frame B Success");
-                    subFrameB.dispose();
-                    createResultFrame();
-
-                } catch (NumberFormatException i) {
-                    JFrame errorFrame = new JFrame();
-                    JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Alert", JOptionPane.WARNING_MESSAGE);
+                    subFrameA.setVisible(true);
+                    break;
                 }
-                break;
-            case "OkResult":
-                subFrameResult.dispose();
-                MatrixCalculator.setOperation(null);
-                break;
-            case "Save":
-                System.out.println(MatrixCalculator.getOperation());
-                System.out.println("File Saved: " + FileSaver.createSaveTwoInput(subMatrix1, subMatrix2, subMatrixResult, operation));
+                case 2: {
+                    JTextField[][] temp = CopyPaste.pasteMatrix(textFieldB, index - 1);
+                    for (int i = 0; i < textFieldB.length; i++) {
+                        for (int j = 0; j < textFieldB[0].length; j++) {
+                            textFieldB[i][j].setText(temp[i][j].getText());
+                        }
+                    }
+                    subFrameB.setVisible(true);
+                    break;
+                }
+            }
         }
+
     }
 
 }

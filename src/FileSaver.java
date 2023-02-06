@@ -24,7 +24,7 @@ public class FileSaver {
                         String currentName = tempFile.getName();
                         currentName = currentName.substring(0, currentName.lastIndexOf("."));
                         int currentNum = 0;
-                        if (currentName != "" && currentName != null) {
+                        if (!currentName.equals("")) {
                             currentNum = Integer.parseInt(currentName);
                         }
                         if (currentNum > currentFile) {
@@ -77,8 +77,6 @@ public class FileSaver {
             }
 
             return true;
-
-            ///Users/jacoblarson/Desktop/Calcualtor Test
         } catch (IOException e) {
             e.printStackTrace();
             return false;

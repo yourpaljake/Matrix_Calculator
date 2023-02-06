@@ -59,6 +59,7 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         frame.add(p, g);
 
         frame.setSize(600,400);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
@@ -71,6 +72,10 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         operation = op;
     }
 
+    public static JFrame getFrame() {
+        return frame;
+    }
+
     public static void main(String[] args) {
         MatrixCalculator calculator = new MatrixCalculator();
     }
@@ -81,13 +86,17 @@ public class MatrixCalculator extends JFrame implements ActionListener {
 
         if (s.equals("Go")) {
             if (!(operation == null) && !operation.equals("")) {
+                label.setText("Operation: ");
                 switch (operation) {
                     case "add", "subtract": {
                         SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
+                        frame.setVisible(false);
                         break;
                     }
                     case "scale": {
                         SubFrameScale sF1 = new SubFrameScale();
+                        frame.setVisible(false);
+                        break;
                     }
                 }
             }
