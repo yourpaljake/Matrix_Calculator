@@ -3,12 +3,12 @@ import javax.swing.*;
 public class CopyPaste {
 
     @SuppressWarnings("FieldMayBeFinal")
-    static private double[][][] matrices;
+    static private String[][][] matrices;
 
-    static private int num;
+    static private final int num = 6;
 
     static {
-        matrices = new double[6][1][1];
+        matrices = new String[num][1][1];
     }
 
     public static JMenu createSaveMenu() {
@@ -26,8 +26,6 @@ public class CopyPaste {
     }
 
     public static JMenu createPasteMenu() {
-        num = 6;
-        
         JMenu temp = new JMenu("Edit");
 
         for (int i = 1; i < num + 1; i++) {
@@ -42,9 +40,9 @@ public class CopyPaste {
         return temp;
     }
 
-    public static void saveMatrix(double[][] matrix, int pos) {
+    public static void saveMatrix(String[][] matrix, int pos) {
         try {
-            matrices[pos] = new double[matrix.length][matrix[0].length];
+            matrices[pos] = new String[matrix.length][matrix[0].length];
             for (int i = 0; i < matrix.length; i++) {
                 System.arraycopy(matrix[i], 0, matrices[pos][i], 0, matrix[0].length);
             }

@@ -79,7 +79,18 @@ public class MatrixCalculator extends JFrame implements ActionListener {
                 //noinspection EnhancedSwitchMigration
                 switch (operation) {
                     case "add", "subtract": {
-                        SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
+                        boolean temp = false;
+                        if (SubFrameAddSubtract.getIsShowing() != null) {
+                            for (boolean bool : SubFrameAddSubtract.getIsShowing()) {
+                                if (bool) {
+                                    temp = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!temp) {
+                            SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
+                        }
                         break;
                     }
                     case "scale": {

@@ -8,13 +8,17 @@ public class SubFrameScale extends JFrame implements ActionListener {
     static private JFrame subF, subFrameScale, subFrameA, subFrameResult;
     static private JTextField dimMText, dimNText, constantScale;
     static private JTextField[][] textField;
-    static private double[][] subMatrix, subMatrixResult;
+    static private double[][] subMatrix;
+    static private String[][] inputs1, resultsString;
     static private int dimM, dimN;
     static private double scalar;
+    static private String scalarString;
     static private int currentFrame;
     @SuppressWarnings("MismatchedReadAndWriteOfArray")
     static private boolean[] isShowing;
+    static private boolean[] isFractionArray;
     public SubFrameScale() {
+        isFractionArray = new boolean[2];
         isShowing = new boolean[4];
         currentFrame = 0;
         subF = new JFrame("Matrix cA");
@@ -56,7 +60,6 @@ public class SubFrameScale extends JFrame implements ActionListener {
     private void createFrameScale() {
         currentFrame = 1;
         subFrameScale = new JFrame("Scalar");
-        subFrameScale.setBackground(Color.green);
         subFrameScale.setLayout(new GridBagLayout());
         GridBagConstraints g = new GridBagConstraints();
         g.gridx = 0;
@@ -141,10 +144,36 @@ public class SubFrameScale extends JFrame implements ActionListener {
         g.gridx = 0;
         g.gridy = 0;
 
-        subMatrixResult = calculateResult(subMatrix, scalar);
-
         JLabel[][] results;
-        results = MatrixHelper.toJLabel(subMatrixResult);
+
+        if (isFractionArray[0] && isFractionArray[1]) {
+            resultsString = MatrixHelper.scaleFractionArray(scalarString, inputs1);
+            results = MatrixHelper.toJLabel(resultsString);
+        } else if (isFractionArray[0] ^ isFractionArray[1]) {
+            if (isFractionArray[0]) {
+                for (int i = 0; i < dimM; i++) {
+                    for (int j = 0; j < dimN; j++) {
+                        inputs1[i][j] = subMatrix[i][j] + "/1";
+                    }
+                }
+                System.out.println("Scalar was Fractional");
+            } else {
+                scalarString = scalar + "/1";
+                System.out.println("Matrix was Fractional");
+            }
+            resultsString = MatrixHelper.scaleFractionArray(scalarString, inputs1);
+            results = MatrixHelper.toJLabel(resultsString);
+        } else {
+            double[][] subMatrixResult = calculateResult(subMatrix, scalar);
+            resultsString = new String[subMatrixResult.length][subMatrixResult[0].length];
+            for (int i = 0; i < subMatrixResult.length; i++) {
+                for (int j = 0; j < subMatrixResult[0].length; j++) {
+                    resultsString[i][j] = subMatrixResult[i][j] + "";
+                }
+            }
+
+            results = MatrixHelper.toJLabel(subMatrixResult);
+        }
 
         for (JLabel[] labels: results) {
             for (int i = 0; i < labels.length; i++) {
@@ -187,6 +216,9 @@ public class SubFrameScale extends JFrame implements ActionListener {
         for (int i = 0; i < temp.length; i++) {
             for (int j = 0; j < temp[0].length; j++) {
                 temp[i][j] = scale * matrix[i][j];
+                if (temp[i][j] == -0) {
+                    temp[i][j] = 0;
+                }
             }
         }
         return temp;
@@ -218,63 +250,69 @@ public class SubFrameScale extends JFrame implements ActionListener {
         }
     }
 
-    private static boolean fractionToScalar(String s) {
-        try {
-            int posOfSlash = s.indexOf("/");
-            int numerator = Integer.parseInt(s.substring(0,posOfSlash));
-            int denominator = Integer.parseInt(s.substring(posOfSlash + 1));
-
-            scalar = ((double) numerator) / denominator;
-
-            return true;
-        } catch (NumberFormatException e) {
-            JFrame errorFrame = new JFrame();
-            JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
-    }
-
     @SuppressWarnings("DuplicateExpressions")
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
 
         if (s.equals("Go")) {
             try {
-                dimM = Integer.parseInt(dimMText.getText());
-                dimN = Integer.parseInt(dimNText.getText());
+                if (Integer.parseInt(dimMText.getText()) > 0 && Integer.parseInt(dimNText.getText()) > 0) {
+                    dimM = Integer.parseInt(dimMText.getText());
+                    dimN = Integer.parseInt(dimNText.getText());
+                }
                 subF.dispose();
                 createFrameScale();
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+                System.out.println("Failed to parse dimensions");
             }
             System.out.printf("Size of Matrix: %d x %d%n", dimM, dimN);
         } else if (s.equals("OkScale")) {
             try {
-                String text = constantScale.getText();
-                if (SubFrameScale.fractionToScalar(text)) {
-                    System.out.println("Fraction converted to double");
-                } else {
-                    scalar = Double.parseDouble(text);
-                    System.out.println("Value already double");
+                scalarString = constantScale.getText();
+
+                isFractionArray[0] = MatrixHelper.isFraction(scalarString);
+                System.out.println("Scalar is fraction: " + isFractionArray[0]);
+                if (!isFractionArray[0]) {
+                    scalar = Double.parseDouble(scalarString);
+                    System.out.println(scalarString + " is a double");
                 }
+
+                System.out.println("Frame Scalar Success");
                 subFrameScale.dispose();
                 createFrameMatrix();
 
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+                System.out.println("Failed ot parse Frame Scale");
             }
-            System.out.println("Frame A Success");
         } else if (s.equals("OkA")) {
             try {
+                inputs1 = new String[dimM][dimN];
                 for (int i = 0; i < dimM; i++) {
                     for (int j = 0; j < dimN; j++) {
-                        subMatrix[i][j] = Double.parseDouble(textField[i][j].getText());
+                        inputs1[i][j] = textField[i][j].getText();
                     }
                 }
+
+                isFractionArray[1] = MatrixHelper.isFractionArray(inputs1);
+                System.out.println("Is a fraction array: " + isFractionArray[1]);
+                if (!isFractionArray[1]) {
+                    for (int i = 0; i < dimM; i++) {
+                        for (int j = 0; j < dimN; j++) {
+                            if (MatrixHelper.isFraction(inputs1[i][j])) {
+                                subMatrix[i][j] = MatrixHelper.fractionToDouble(inputs1[i][j]);
+                                System.out.println("Fraction converted to double");
+                            } else {
+                                subMatrix[i][j] = Double.parseDouble(inputs1[i][j]);
+                                System.out.println("Value already double");
+                            }
+                        }
+                    }
+                }
+
                 System.out.println("Frame B Success");
                 subFrameA.dispose();
                 createResultFrame();
@@ -282,32 +320,50 @@ public class SubFrameScale extends JFrame implements ActionListener {
             } catch (NumberFormatException i) {
                 JFrame errorFrame = new JFrame();
                 JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+                System.out.println("Failed to parse Frame B");
             }
         } else if (s.equals("OkResult")) {
             isShowing[3] = false;
             subFrameResult.dispose();
             MatrixCalculator.setOperation(null);
         } else if (s.equals("save")) {
-            System.out.println("File Saved: " + FileSaver.createSaveScalarInput(scalar, subMatrix, subMatrixResult, "scale"));
+            System.out.println("File Saved: " + FileSaver.createSaveScalarInput(scalarString, inputs1, resultsString, "scale"));
         } else if (s.substring(0, s.length() - 2).equals("Save")) {
             int index = Integer.parseInt(s.substring(s.length() - 1));
             switch (currentFrame) {
                 case 2: {
                     try {
+                        inputs1 = new String[dimM][dimN];
                         for (int i = 0; i < dimM; i++) {
                             for (int j = 0; j < dimN; j++) {
-                                subMatrix[i][j] = Double.parseDouble(textField[i][j].getText());
+                                inputs1[i][j] = textField[i][j].getText();
+                            }
+                        }
+
+                        isFractionArray[1] = MatrixHelper.isFractionArray(inputs1);
+                        System.out.println("Is a fraction array: " + isFractionArray[1]);
+                        if (!isFractionArray[1]) {
+                            for (int i = 0; i < dimM; i++) {
+                                for (int j = 0; j < dimN; j++) {
+                                    if (MatrixHelper.isFraction(inputs1[i][j])) {
+                                        subMatrix[i][j] = MatrixHelper.fractionToDouble(inputs1[i][j]);
+                                        System.out.println("Fraction converted to double");
+                                    } else {
+                                        subMatrix[i][j] = Double.parseDouble(inputs1[i][j]);
+                                        System.out.println("Value already double");
+                                    }
+                                }
                             }
                         }
                     } catch (NumberFormatException i) {
                         JFrame errorFrame = new JFrame();
                         JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
                     }
-                    CopyPaste.saveMatrix(subMatrix, index - 1);
+                    CopyPaste.saveMatrix(inputs1, index - 1);
                     break;
                 }
                 case 3: {
-                    CopyPaste.saveMatrix(subMatrixResult, index - 1);
+                    CopyPaste.saveMatrix(resultsString, index - 1);
                     break;
                 }
             }

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class FileSaver {
     static private String locationDirectory;
-    public static boolean createSaveTwoInput(double[][] matrix1, double[][] matrix2, double[][] result, String operation) {
+    public static boolean createSaveTwoInput(String[][] matrix1, String[][] matrix2, String[][] result, String operation) {
         try {
             if (locationDirectory == null) {
                 JFrame locationFrame = new JFrame("Save");
@@ -45,31 +45,43 @@ public class FileSaver {
             try {
                 FileWriter fileWriter = new FileWriter(newSave);
 
+                fileWriter.write("Operation: " + operation + "\n");
+
                 fileWriter.write("Matrix A: \n");
-                String[][] matrixA = MatrixHelper.matrixToString(matrix1);
-                for (String[] columns: matrixA) {
+                for (String[] columns: matrix1) {
                     for (String value: columns) {
-                        fileWriter.write(value);
+                        if (MatrixHelper.isWholeNumber(value)) {
+                            String numerator = value.substring(0, value.indexOf("/"));
+                            fileWriter.write(numerator + "\t");
+                        } else {
+                            fileWriter.write(value + "\t");
+                        }
                     }
                     fileWriter.write("\n");
                 }
 
                 fileWriter.write("Matrix B: \n");
-                String[][] matrixB = MatrixHelper.matrixToString(matrix2);
-                for (String[] columns: matrixB) {
+                for (String[] columns: matrix2) {
                     for (String value: columns) {
-                        fileWriter.write(value);
+                        if (MatrixHelper.isWholeNumber(value)) {
+                            String numerator = value.substring(0, value.indexOf("/"));
+                            fileWriter.write(numerator + "\t");
+                        } else {
+                            fileWriter.write(value + "\t");
+                        }
                     }
                     fileWriter.write("\n");
                 }
 
-                fileWriter.write("Operation: " + operation + "\n");
-
                 fileWriter.write("Result: \n");
-                String[][] resultString = MatrixHelper.matrixToString(result);
-                for (String[] columns: resultString) {
+                for (String[] columns: result) {
                     for (String value: columns) {
-                        fileWriter.write(value);
+                        if (MatrixHelper.isWholeNumber(value)) {
+                            String numerator = value.substring(0, value.indexOf("/"));
+                            fileWriter.write(numerator + "\t");
+                        } else {
+                            fileWriter.write(value + "\t");
+                        }
                     }
                     fileWriter.write("\n");
                 }
@@ -88,7 +100,7 @@ public class FileSaver {
         }
     }
 
-    public static boolean createSaveScalarInput(double scalar, double[][] matrix, double[][] result, String operation) {
+    public static boolean createSaveScalarInput(String scalar, String[][] matrix, String[][] result, String operation) {
         try {
             if (locationDirectory == null) {
                 JFrame locationFrame = new JFrame("Save");
@@ -124,26 +136,33 @@ public class FileSaver {
             try {
                 FileWriter fileWriter = new FileWriter(newSave);
 
-                fileWriter.write("Scalar: \n");
-                String scalarC = scalar + "\n";
-                fileWriter.write(scalarC);
+                fileWriter.write("Operation: " + operation + "\n");
 
-                fileWriter.write("Matrix B: \n");
-                String[][] matrixB = MatrixHelper.matrixToString(matrix);
-                for (String[] columns: matrixB) {
+                fileWriter.write(String.format("Scalar: %s%n", scalar));
+
+                fileWriter.write("Matrix A: \n");
+                for (String[] columns: matrix) {
                     for (String value: columns) {
-                        fileWriter.write(value);
+                        if (MatrixHelper.isWholeNumber(value)) {
+                            int temp = Double.valueOf(value.substring(0, value.indexOf("/"))).intValue();
+                            String numerator = temp + "";
+                            fileWriter.write(numerator + "\t");
+                        } else {
+                            fileWriter.write(value + "\t");
+                        }
                     }
                     fileWriter.write("\n");
                 }
 
-                fileWriter.write("Operation: " + operation + "\n");
-
                 fileWriter.write("Result: \n");
-                String[][] resultString = MatrixHelper.matrixToString(result);
-                for (String[] columns: resultString) {
+                for (String[] columns: result) {
                     for (String value: columns) {
-                        fileWriter.write(value);
+                        if (MatrixHelper.isWholeNumber(value)) {
+                            String numerator = value.substring(0, value.indexOf("/"));
+                            fileWriter.write(numerator + "\t");
+                        } else {
+                            fileWriter.write(value + "\t");
+                        }
                     }
                     fileWriter.write("\n");
                 }
