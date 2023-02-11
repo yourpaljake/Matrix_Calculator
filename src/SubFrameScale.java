@@ -14,7 +14,6 @@ public class SubFrameScale extends JFrame implements ActionListener {
     static private double scalar;
     static private String scalarString;
     static private int currentFrame;
-    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     static private boolean[] isShowing;
     static private boolean[] isFractionArray;
     public SubFrameScale() {
@@ -250,6 +249,10 @@ public class SubFrameScale extends JFrame implements ActionListener {
         }
     }
 
+    public static boolean[] getIsShowing() {
+        return isShowing;
+    }
+
     @SuppressWarnings("DuplicateExpressions")
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
@@ -302,12 +305,15 @@ public class SubFrameScale extends JFrame implements ActionListener {
                 if (!isFractionArray[1]) {
                     for (int i = 0; i < dimM; i++) {
                         for (int j = 0; j < dimN; j++) {
-                            if (MatrixHelper.isFraction(inputs1[i][j])) {
-                                subMatrix[i][j] = MatrixHelper.fractionToDouble(inputs1[i][j]);
-                                System.out.println("Fraction converted to double");
-                            } else {
-                                subMatrix[i][j] = Double.parseDouble(inputs1[i][j]);
-                                System.out.println("Value already double");
+                            subMatrix[i][j] = Double.parseDouble(inputs1[i][j]);
+                            System.out.println(inputs1[i][j] + " is already a double");
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < dimM; i++) {
+                        for (int j = 0; j < dimN; j++) {
+                            if (!MatrixHelper.isFraction(inputs1[i][j])) {
+                                inputs1[i][j] += "/1";
                             }
                         }
                     }

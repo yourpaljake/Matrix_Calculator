@@ -22,6 +22,7 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         JMenuItem add = new JMenuItem("Add (A+B)");
         JMenuItem subtract = new JMenuItem("Subtract (A-B)");
         JMenuItem scale = new JMenuItem("Scale (cA)");
+        JMenuItem multiply = new JMenuItem("Multiply AxB");
 
         add.addActionListener(this);
         add.setActionCommand("add");
@@ -29,10 +30,13 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         subtract.setActionCommand("subtract");
         scale.addActionListener(this);
         scale.setActionCommand("scale");
+        multiply.addActionListener(this);
+        multiply.setActionCommand("multiply");
 
         elementary.add(add);
         elementary.add(subtract);
         elementary.add(scale);
+        elementary.add(multiply);
 
         mb.add(elementary);
 
@@ -94,7 +98,33 @@ public class MatrixCalculator extends JFrame implements ActionListener {
                         break;
                     }
                     case "scale": {
-                        SubFrameScale sF1 = new SubFrameScale();
+                        boolean temp = false;
+                        if (SubFrameScale.getIsShowing() != null) {
+                            for (boolean bool : SubFrameMultiply.getIsShowing()) {
+                                if (bool) {
+                                    temp = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!temp) {
+                            SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
+                        }
+                        break;
+                    }
+                    case "multiply": {
+                        boolean temp = false;
+                        if (SubFrameMultiply.getIsShowing() != null) {
+                            for (boolean bool : SubFrameMultiply.getIsShowing()) {
+                                if (bool) {
+                                    temp = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!temp) {
+                            SubFrameMultiply sF1 = new SubFrameMultiply();
+                        }
                         break;
                     }
                 }

@@ -159,12 +159,12 @@ public class MatrixHelper {
     public static boolean isFractionArray(String[][] matrix) {
         for (String[] columns: matrix) {
             for (String value: columns) {
-                if (!isFraction(value)) {
-                    return false;
+                if (isFraction(value)) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public static double fractionToDouble(String s) throws NumberFormatException{
@@ -273,6 +273,33 @@ public class MatrixHelper {
             for (int j = 0; j < temp[0].length; j++) {
                 String s = multiplyFractions(scalar, matrix[i][j]);
                 temp[i][j] = s;
+            }
+        }
+
+        return temp;
+    }
+
+    public static String[][] multiplyFractionArray(String[][] matrix1, String[][] matrix2) {
+        String[][] temp = new String[matrix1.length][matrix2[0].length];
+
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[0].length; j++) {
+                temp[i][j] = "0/1";
+            }
+        }
+
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[0].length; j++) {
+                for (int k = 0; k < matrix2.length; k++) {
+                    String tempProduct = multiplyFractions(matrix1[i][k], matrix2[k][j]);
+                    if (!isFraction(tempProduct)) {
+                        tempProduct += "/1";
+                    }
+                    if (!isFraction(temp[i][j])) {
+                        temp[i][j] += "/1";
+                    }
+                    temp[i][j] = addFractions(temp[i][j], tempProduct);
+                }
             }
         }
 
