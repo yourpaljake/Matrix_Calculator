@@ -307,31 +307,46 @@ public class SubFrameMultiply extends JFrame implements ActionListener {
         System.out.printf("Current Action of %s on frame %d%n",s,currentFrame);
 
         if (s.equals("Go")) {
+            boolean errorWasShown = false;
             try {
                 if (Integer.parseInt(dimMText1.getText()) > 0 && Integer.parseInt(dimNText1.getText()) > 0) {
                     dimM1 = Integer.parseInt(dimMText1.getText());
                     dimN1 = Integer.parseInt(dimNText1.getText());
 
                     if (Integer.parseInt(dimMText2.getText()) == dimN1) {
-                        dimM2 = Integer.parseInt(dimMText2.getText());
-                        dimN2 = Integer.parseInt(dimNText2.getText());
-                        dimMR = dimM1;
-                        dimNR = dimN2;
-                        subF.dispose();
-                        createFrame1();
+                        if (Integer.parseInt(dimMText2.getText()) > 0 && Integer.parseInt(dimNText2.getText()) > 0) {
+                            dimM2 = Integer.parseInt(dimMText2.getText());
+                            dimN2 = Integer.parseInt(dimNText2.getText());
+                            dimMR = dimM1;
+                            dimNR = dimN2;
+                            subF.dispose();
+                            createFrame1();
+                        } else {
+                            String error = "Invalid input. Dimensions of matrices must be a positive integer.";
+                            JOptionPane.showMessageDialog(new JFrame(), error, "Error", JOptionPane.WARNING_MESSAGE);
+                            System.out.println("Not valid dimensions");
+                            errorWasShown = true;
+                            Integer.parseInt("hi");
+                        }
                     } else {
                         String error = "Invalid input. Matrix of size %s x %s cannot be multiplied by Matrix of size %s x %s.";
                         JOptionPane.showMessageDialog(new JOptionPane(), String.format(error, dimMText2.getText(), dimNText2.getText(), dimM1, dimN1));
+                        System.out.println("Not valid dimensions");
+                        errorWasShown = true;
+                        Integer.parseInt("hi");
                     }
                 } else {
                     String error = "Invalid input. Dimensions of matrices must be a positive integer.";
                     JOptionPane.showMessageDialog(new JFrame(), error, "Error", JOptionPane.WARNING_MESSAGE);
                     System.out.println("Not valid dimensions");
+                    errorWasShown = true;
                     Integer.parseInt("hi");
                 }
             } catch (NumberFormatException i) {
-                JOptionPane errorFrame = new JOptionPane();
-                JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+                if (!errorWasShown) {
+                    JOptionPane errorFrame = new JOptionPane();
+                    JOptionPane.showMessageDialog(errorFrame, "Invalid Input", "Error", JOptionPane.WARNING_MESSAGE);
+                }
                 System.out.println("Failed to parse dimensions");
             }
             System.out.printf("Size of Matrix A: %d x %d%nSize of Matrix B: %d x %d%n", dimM1, dimN1, dimM2, dimN2);
