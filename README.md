@@ -11,16 +11,21 @@ Features:
 3) Matrix Scaling
 - Accessible through Elementary Operations Menu on the Main Screen
 
-4) Copy and Paste
+4) Matrix Multiplication
+- Accessible through Elementary Operations Menu on the Main Screen
+
+5) Copy and Paste
 - Accessible through Edit Menu anywhere matrices are input
 
-5) Save Results to Folder
+6) Save Results to Folder
 - Accessible on the Result Screen
 
 
 
 Planned Additions: 
-1) Matrix Multiplication
-
+- Matrix Inversion
+- REF Compution
+- RREF Compution
+- Linear System Solver
 
 *requires java*
