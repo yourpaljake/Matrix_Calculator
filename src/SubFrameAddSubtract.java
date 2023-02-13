@@ -4,6 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
+/**
+ * This houses the Matrix Addition and Subtraction functionality of the program. It is called to
+ * in the MatrixCalculator class with a parameter containing the operation to create an instance
+ * of this class.
+ *
+ * @author Jacob Larson
+ * @version 0.3.3
+ * @since 01/28/23
+ */
 
 public class SubFrameAddSubtract extends JFrame implements ActionListener {
     static private JFrame subF, subFrameA, subFrameB, subFrameResult;

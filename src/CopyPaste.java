@@ -1,4 +1,12 @@
 import javax.swing.*;
+/**
+ * This houses the Copy and Paste functionality of the program. It allows
+ * the user to save matrices from the JTextFields to be pasted in other frames
+ *
+ * @author Jacob Larson
+ * @version 0.3.3
+ * @since 01/28/23
+ */
 
 public class CopyPaste {
 

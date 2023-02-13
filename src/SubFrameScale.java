@@ -4,6 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
+/**
+ * This houses the Matrix Scaling functionality of the program. It is called to
+ * in the MatrixCalculator class to create an instance of this class.
+ *
+ * @author Jacob Larson
+ * @version 0.3.3
+ * @since 01/28/23
+ */
 
 @SuppressWarnings({"WriteOnlyObject", "EnhancedSwitchMigration"})
 public class SubFrameScale extends JFrame implements ActionListener {

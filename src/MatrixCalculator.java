@@ -3,6 +3,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This is the main class for the program. It sets up the initial frame
+ * and allows the user to navigate to the various other features of the calculator
+ *
+ * @author Jacob Larson
+ * @version 0.3.3
+ * @since 01/28/23
+ */
 public class MatrixCalculator extends JFrame implements ActionListener {
     static private JLabel label;
 

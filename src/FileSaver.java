@@ -2,6 +2,15 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+/**
+ * This houses the File Saver functionality of the program. It is called to
+ * at the result frame of the program and prompts the user for a directory
+ * to save the file to
+ *
+ * @author Jacob Larson
+ * @version 0.3.3
+ * @since 01/28/23
+ */
 
 public class FileSaver {
     static private String locationDirectory;
