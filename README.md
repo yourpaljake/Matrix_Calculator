@@ -29,3 +29,4 @@ Planned Additions:
 - Linear System Solver
 
 *requires java*
+***The location of the runnable jar file is out/artifacts/MatrixCalculator_jar***
