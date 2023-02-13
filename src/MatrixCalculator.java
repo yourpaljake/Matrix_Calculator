@@ -80,52 +80,44 @@ public class MatrixCalculator extends JFrame implements ActionListener {
         if (s.equals("Go")) {
             if (!(operation == null) && !operation.equals("")) {
                 label.setText("Operation: ");
-                //noinspection EnhancedSwitchMigration
+                boolean temp = false;
+                if (SubFrameAddSubtract.getIsShowing() != null) {
+                    for (boolean bool : SubFrameAddSubtract.getIsShowing()) {
+                        if (bool) {
+                            temp = true;
+                            break;
+                        }
+                    }
+                } else if (SubFrameScale.getIsShowing() != null) {
+                    for (boolean bool : SubFrameScale.getIsShowing()) {
+                        if (bool) {
+                            temp = true;
+                            break;
+                        }
+                    }
+                } else if (SubFrameMultiply.getIsShowing() != null) {
+                    for (boolean bool : SubFrameMultiply.getIsShowing()) {
+                        if (bool) {
+                            temp = true;
+                            break;
+                        }
+                    }
+                }
                 switch (operation) {
-                    case "add", "subtract": {
-                        boolean temp = false;
-                        if (SubFrameAddSubtract.getIsShowing() != null) {
-                            for (boolean bool : SubFrameAddSubtract.getIsShowing()) {
-                                if (bool) {
-                                    temp = true;
-                                    break;
-                                }
-                            }
-                        }
+                    case "add", "subtract" -> {
                         if (!temp) {
                             SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
                         }
-                        break;
                     }
-                    case "scale": {
-                        boolean temp = false;
-                        if (SubFrameScale.getIsShowing() != null) {
-                            for (boolean bool : SubFrameMultiply.getIsShowing()) {
-                                if (bool) {
-                                    temp = true;
-                                    break;
-                                }
-                            }
-                        }
+                    case "scale" -> {
                         if (!temp) {
-                            SubFrameAddSubtract sF1 = new SubFrameAddSubtract(operation);
+                            SubFrameScale sF1 = new SubFrameScale();
                         }
-                        break;
                     }
-                    case "multiply": {
-                        boolean temp = false;
-                        if (SubFrameMultiply.getIsShowing() != null) {
-                            for (boolean bool : SubFrameMultiply.getIsShowing()) {
-                                if (bool) {
-                                    temp = true;
-                                    break;
-                                }
-                            }
-                        }
+                    case "multiply" -> {
                         if (!temp) {
                             SubFrameMultiply sF1 = new SubFrameMultiply();
                         }
-                        break;
                     }
                 }
             } else {

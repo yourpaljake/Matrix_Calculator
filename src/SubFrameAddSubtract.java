@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.util.Arrays;
 
 public class SubFrameAddSubtract extends JFrame implements ActionListener {
     static private JFrame subF, subFrameA, subFrameB, subFrameResult;
@@ -50,6 +52,12 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
 
         subF.add(subB);
 
+        subF.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Arrays.fill(isShowing, false);
+            }});
+
         subF.setSize(500,200);
         subF.setLocationRelativeTo(null);
         subF.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -94,6 +102,12 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         addActionToPasteMenu(tempMenu);
         menuBar.add(tempMenu);
         subFrameA.setJMenuBar(menuBar);
+
+        subFrameA.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Arrays.fill(isShowing, false);
+            }});
 
         subFrameA.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameA.setLocationRelativeTo(null);
@@ -140,6 +154,12 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         addActionToPasteMenu(tempMenu);
         menuBar.add(tempMenu);
         subFrameB.setJMenuBar(menuBar);
+
+        subFrameB.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Arrays.fill(isShowing, false);
+            }});
 
         subFrameB.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameB.setLocationRelativeTo(null);
@@ -220,6 +240,12 @@ public class SubFrameAddSubtract extends JFrame implements ActionListener {
         addActionToSaveMenu(tempMenu);
         menuBar.add(tempMenu);
         subFrameResult.setJMenuBar(menuBar);
+
+        subFrameResult.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Arrays.fill(isShowing, false);
+            }});
 
         subFrameResult.setSize(200 + 30 * dimN,200 + 30 * dimN);
         subFrameResult.setLocationRelativeTo(null);
